@@ -1,0 +1,1 @@
+var WebStreamer = require('webstreamer').WebStreamer;

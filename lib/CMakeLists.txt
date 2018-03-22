@@ -1,0 +1,5 @@
+project(lib)
+file(GLOB LWS_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.[ch] ${CMAKE_CURRENT_SOURCE_DIR}/*.cc)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+add_library(libwebstreamer  SHARED ${LWS_SOURCES} )
+target_link_libraries(libwebstreamer ${GST_MODULES_LIBRARIES} )
