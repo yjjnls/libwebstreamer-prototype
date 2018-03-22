@@ -22,13 +22,13 @@ static void init(const void *self, const void *data, size_t size, void(*cb)(cons
 	if (data)
 	{
 		//do parse 
-		printf("init param <%s>\n", (char*)data);
+		//printf("init param <%s>\n", (char*)data);
 	}
-	printf("gstreamer init!\n");
+//	printf("gstreamer init!\n");
 	
 	//owr_init(libwebstreamer_main_context);
 	//owr_run_in_background();
-	printf("gstreamer init done.\n");
+//	printf("gstreamer init done.\n");
 
 
 
@@ -77,7 +77,7 @@ static void call(const void *self, const void *context,
 static void terminate(const void *self, void(*cb)(const void *self, int status, char *msg))
 {
 //	owr_quit();
-	printf("gstreamer quite.\n");
+//	printf("gstreamer quite.\n");
 	webstreamer_terminate();
 	if (cb)
 	{
@@ -87,4 +87,4 @@ static void terminate(const void *self, void(*cb)(const void *self, int status, 
 	}
 }
 
-NODE_PLUGIN_IMPL(__VERSION__, init, call, terminate)
+NODE_PLUGIN_IMPL(0.2.0, init, call, terminate)
