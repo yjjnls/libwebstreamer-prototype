@@ -160,7 +160,7 @@ node_plugin_interface_t* node_plugin_interface_initialize(          \
 	iface->init = _init_;                                           \
 	iface->call = _call_;                                           \
 	iface->terminate = _terminate_;	                                \
-	iface->version = #_VERSION;                                     \
+	iface->version = _VERSION;                                      \
 	return iface;													\
 }																	\
 																	\

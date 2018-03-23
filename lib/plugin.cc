@@ -5,7 +5,7 @@
 
 #include "nlohmann/json.hpp"
 
-#define __VERSION__ 0.1.0
+#define __VERSION__ "0.1.1"
 
 
 static void init(const void *self, const void *data, size_t size, void(*cb)(const void *self, int status, char *msg))
@@ -87,4 +87,4 @@ static void terminate(const void *self, void(*cb)(const void *self, int status, 
 	}
 }
 
-NODE_PLUGIN_IMPL(0.2.0, init, call, terminate)
+NODE_PLUGIN_IMPL(__VERSION__, init, call, terminate)
