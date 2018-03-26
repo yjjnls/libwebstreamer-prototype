@@ -4,13 +4,14 @@
 #include "webstreamer.h"
 
 #include "nlohmann/json.hpp"
+#include "promise.h"
+#define __VERSION__ 0.1.1
 
-#define __VERSION__ 0.1.0
-
-
+static WebStreamer* _webstreamer = NULL;
 static void init(const void *self, const void *data, size_t size, void(*cb)(const void *self, int status, char *msg))
 {
-	if (!webstreamer_initialize())
+	_webstreamer = new WebStreamer();
+	if (!_webstreamer->Initialize())
 	{
 		cb(self, 1, ERRORMSG("init","gstreamer initialize failed.") );
 		return;
@@ -39,16 +40,27 @@ static void init(const void *self, const void *data, size_t size, void(*cb)(cons
 		// cb(self, 1 ,"Initalize error!");
 	}
 }
+#include <iostream>
+
 
 static void call(const void *self, const void *context,
 	const void *data, size_t size)
 {
+	
+	nlohmann::json obj;
+	if (data && size) {
+		obj = nlohmann::json::parse((const char*)data);
+	}
+	Promise* promise = new Promise((void*)self, context, obj);
+	_webstreamer->Exec(promise);
+	promise = nullptr;
+
 	//static int counter = 0;
 	//node_plugin_interface_t *iface = (node_plugin_interface_t *)self;
 	//if (iface->call_return)
 	//{
 	//	int status = 0;
-	//	char retval[256];
+	//	char retval[256]="HELLO";
 	//
 	//	try
 	//	{
@@ -62,7 +74,7 @@ static void call(const void *self, const void *context,
 	//		status = 1;
 	//	}
 	//
-	//	iface->call_return(self, context, retval, strlen(retval) + 1, status, NULL, NULL);
+	//	iface->call_return(self, context, retval, strlen(retval) + 1, 0, NULL, NULL);
 	//}
 	//
 	//counter++;
@@ -78,7 +90,7 @@ static void terminate(const void *self, void(*cb)(const void *self, int status, 
 {
 //	owr_quit();
 //	printf("gstreamer quite.\n");
-	webstreamer_terminate();
+	_webstreamer->Terminate();
 	if (cb)
 	{
 		cb(self, 0, ">>>>>Terminate done!<<<<<");
@@ -87,4 +99,4 @@ static void terminate(const void *self, void(*cb)(const void *self, int status, 
 	}
 }
 
-NODE_PLUGIN_IMPL(0.2.0, init, call, terminate)
+NODE_PLUGIN_IMPL(__VERSION__, init, call, terminate)
