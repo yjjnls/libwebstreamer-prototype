@@ -7,7 +7,12 @@
 #include "promise.h"
 #define __VERSION__ 0.1.1
 
+
 static WebStreamer* _webstreamer = NULL;
+
+#define __VERSION__ "0.1.1"
+
+
 static void init(const void *self, const void *data, size_t size, void(*cb)(const void *self, int status, char *msg))
 {
 	_webstreamer = new WebStreamer();
