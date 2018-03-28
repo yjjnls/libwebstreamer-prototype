@@ -5,9 +5,7 @@
 
 #include "nlohmann/json.hpp"
 #include "promise.h"
-#define __VERSION__ 0.1.1
-
-
+#include <exception>
 static WebStreamer* _webstreamer = NULL;
 
 #define __VERSION__ "0.1.1"
@@ -15,8 +13,22 @@ static WebStreamer* _webstreamer = NULL;
 
 static void init(const void *self, const void *data, size_t size, void(*cb)(const void *self, int status, char *msg))
 {
+	nlohmann::json j;
+	if (data && size)
+	{
+		try {
+
+			j = nlohmann::json::parse(std::string((const char*)data, size));
+		}
+		catch (std::exception& ){
+			cb(self, 1, ERRORMSG("init", "invalid option format(should be json)."));
+			return;
+		}
+	}
+
+	std::string error;
 	_webstreamer = new WebStreamer();
-	if (!_webstreamer->Initialize())
+	if (!_webstreamer->Initialize(j.is_null() ? NULL :&j ,error))
 	{
 		cb(self, 1, ERRORMSG("init","gstreamer initialize failed.") );
 		return;
@@ -54,7 +66,7 @@ static void call(const void *self, const void *context,
 	
 	nlohmann::json obj;
 	if (data && size) {
-		obj = nlohmann::json::parse((const char*)data);
+		obj = nlohmann::json::parse( std::string((const char*)data, (std::size_t)size));
 	}
 	Promise* promise = new Promise((void*)self, context, obj);
 	_webstreamer->Exec(promise);
