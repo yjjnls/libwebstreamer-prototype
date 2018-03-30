@@ -1,7 +1,7 @@
-#include "processor.h"
+#include "app.h"
 
 
-bool IProcessor::Initialize(Promise* promise)
+bool IApp::Initialize(Promise* promise)
 {
 	if (!pipeline_)
 	{
@@ -19,7 +19,7 @@ bool IProcessor::Initialize(Promise* promise)
 }
 
 
-void IProcessor::Destroy(Promise* promise)
+void IApp::Destroy(Promise* promise)
 {
 
 }

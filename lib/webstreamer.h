@@ -7,24 +7,13 @@
 #include <gst/gst.h>
 
 #include "nlohmann/json.hpp"
-#include "promise.h"
+
 #include <map>
 
-#include "rtsptestserver.h"
+#include "app/rtsptestserver.h"
+#include "app/avanalyzer.h"
 
-//static GThread   *_main_thread = NULL;
-//static GMainLoop *_main_loop = NULL;;
-//static GMainContext *_main_context = NULL;
-
-
-
-
-
-
-
-
-//bool webstreamer_initialize(void);
-//void webstreamer_terminate(void);
+#include "framework/rtspserver.h"
 
 #define ERRORMSG(name,message)\
    "{\"name\": \"" name "\", \"message\": \"" message "\"}"
@@ -34,21 +23,21 @@
 
 //forward
 template<typename... Args>
-struct ProcessorFactory;
+struct AppFactory;
 
 //baic
 template<typename First, typename... Rest>
-struct ProcessorFactory<First, Rest...>
+struct AppFactory<First, Rest...>
 {
 	//enum { value = Sum<First>::value + Sum<Rest...>::value };
-	static IProcessor* Instantiate(const std::string& type, const std::string& name, WebStreamer* ws)
+	static IApp* Instantiate(const std::string& type, const std::string& name, WebStreamer* ws)
 	{
 		if (type == First::CLASS_NAME()) {
 			return new First(name,ws);
 		}
 		else 
 		{
-			return ProcessorFactory<Rest...>::Instantiate(type, name);
+			return AppFactory<Rest...>::Instantiate(type, name,ws);
 		}
 	}
 
@@ -56,9 +45,9 @@ struct ProcessorFactory<First, Rest...>
 
 //end
 template<typename Last>
-struct ProcessorFactory<Last>
+struct AppFactory<Last>
 {
-	static IProcessor* Instantiate(const std::string& type, const std::string& name,WebStreamer* ws)
+	static IApp* Instantiate(const std::string& type, const std::string& name,WebStreamer* ws)
 	{
 		if (type == Last::CLASS_NAME() ) {
 			return new Last(name,ws);
@@ -87,30 +76,40 @@ public:
 	static GMainLoop*    main_loop;
 	static GMainContext* main_context;
 
-	GstRTSPServer* RTSPServer() { return rtsp_server_; }
+	RTSPServer* GetRTSPServer(RTSPServer::Type type = RTSPServer::RFC7826)
+	{
+		if (type >= RTSPServer::SIZE)
+		{
+			return NULL;
+		}
+		return rtspserver_[type];
+	}
 protected:
-	typedef ProcessorFactory< RTSPTestServer > Factory;
+	typedef AppFactory< RTSPTestServer, AVAnalyzer
+	> Factory;
 
 	void CreateProcessor(Promise* promise);
 	void DestroyProcessor(Promise* promise);
-	void ForwardPromiseToProcessor(Promise* promise);
+//	void ForwardPromiseToProcessor(Promise* promise);
 
 	void OnPromise(Promise* promise);
 	static gboolean OnPromise(gpointer user_data);
 
-	inline IProcessor* GetProcessor(const std::string& name, const std::string& type)
+	inline IApp* GetApp(const std::string& name, const std::string& type)
 	{
-		return GetProcessor(name + "@" + type);
+		return GetApp(name + "@" + type);
 	}
 
-	inline IProcessor* GetProcessor(const std::string& uname)
+	inline IApp* GetApp(const std::string& uname)
 	{
-		std::map<std::string, IProcessor*>::iterator it = processors_.find(uname);
-		return   (it == processors_.end()) ? NULL : it->second;
+		std::map<std::string, IApp*>::iterator it = apps_.find(uname);
+		return   (it == apps_.end()) ? NULL : it->second;
 
 	}
 
-	RTSPService* CreateRTSPService(bool onvif = false);
+//	RTSPService* CreateRTSPService(bool onvif = false);
+	
+
 
 private:
 	//GThread*      main_thread_;
@@ -118,9 +117,11 @@ private:
 	//GMainContext* main_context_; g_main_context_push_thread_default
 	//GAsyncQueue*  main_start_queue_; 
 
-	GstRTSPServer*       rtsp_server_;//create an global shared server
+//	GstRTSPServer*       rtsp_server_;//create an global shared server
+	RTSPServer*          rtspserver_[RTSPServer::SIZE];
 	GstRTSPSessionPool*  rtsp_session_pool_;
-	std::map<std::string, IProcessor*> processors_;
+	guint pool_clean_id_;
+	std::map<std::string, IApp*> apps_;
 };
 
 #endif

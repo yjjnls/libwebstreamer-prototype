@@ -34,7 +34,7 @@ protected:
 	bool           is_onvif_;
 	GstRTSPServer* server_;
 	WebStreamer* webstreamer_;
-}
+};
 
 
 

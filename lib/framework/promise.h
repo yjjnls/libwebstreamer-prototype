@@ -8,16 +8,17 @@
 #include "nlohmann/json.hpp"
 
 class WebStreamer;
-class IProcessor;
+class IApp;
 class Promise
 {
 public:
-	Promise(void* iface, const void* context, nlohmann::json param)
+	Promise(void* iface, const void* context, nlohmann::json jmeta, nlohmann::json jdata)
 		: iface_((node_plugin_interface_t *)iface)
 		, context_(context)
-		, param_(param)
+		, jmeta_(jmeta)
+		, jdata_(jdata)
 		, responsed_(false)
-		, processor_(nullptr)
+		, app_(nullptr)
 		, webstreamer_(nullptr)
 	{
 	}
@@ -47,20 +48,25 @@ public:
 		iface_->call_return(iface_, context_, message.c_str(),message.size(), 1, NULL, NULL);
 	}
 
-	const nlohmann::json& param() const
+	const nlohmann::json& data() const
 	{
-		return this->param_;
+		return this->jdata_;
 	}
 
-	IProcessor* processor() { return processor_; }
+	const nlohmann::json& meta() const
+	{
+		return this->jmeta_;
+	}
 
+	//IProcessor* processor() { return processor_; }
+	IApp*        app() { return app_;  }
 	WebStreamer* webstreamer() {return webstreamer_;}
 protected:
 	void SetWebStreamer(WebStreamer* ws) {
 		webstreamer_ = ws;
 	}
-	void SetProcessor(IProcessor* processor) {
-		processor_ = processor;
+	void SetApp(IApp* app) {
+		app_ = app;
 	}
 	friend class WebStreamer;
 
@@ -68,11 +74,11 @@ private:
 
 	node_plugin_interface_t * iface_;
 	const void*               context_;
-	nlohmann::json            param_;
-
+	nlohmann::json            jdata_;
+	nlohmann::json            jmeta_;
 	bool                      responsed_;
 	WebStreamer*              webstreamer_;
-	IProcessor*               processor_;
+	IApp*                     app_;
 
 
 };

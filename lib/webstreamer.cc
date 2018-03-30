@@ -2,7 +2,7 @@
 #include <gst/gst.h>
 
 #include "nlohmann/json.hpp"
-#include "promise.h"
+
 
 #include "webstreamer.h"
 
@@ -77,8 +77,13 @@ static gpointer mainloop(WebStreamerInitialization *wsi)
 
 
 WebStreamer::WebStreamer()
-	: rtsp_server_(NULL)
+	: rtsp_session_pool_(NULL)
+	, pool_clean_id_(0)
 {
+	for (int i=0; i < RTSPServer::SIZE ;i++)
+	{
+		rtspserver_[i] = nullptr;
+	}
 
 }
 bool WebStreamer::Initialize(const nlohmann::json* option, std::string& error)
@@ -96,6 +101,12 @@ bool WebStreamer::Initialize(const nlohmann::json* option, std::string& error)
 }
 void WebStreamer::Terminate()
 {
+	if (pool_clean_id_)
+	{
+		g_source_remove(pool_clean_id_);
+		pool_clean_id_ = 0;
+	}
+
 	if (WebStreamer::main_loop)
 	{
 		g_main_loop_quit(WebStreamer::main_loop);
@@ -126,7 +137,7 @@ void WebStreamer::Exec(Promise* promise)
 
 void WebStreamer::OnPromise(Promise *promise)
 {
-	const json& j = promise->param();
+	const json& j = promise->meta();
 
 	std::string action = j["action"];
 	if (action == "create") {
@@ -138,12 +149,12 @@ void WebStreamer::OnPromise(Promise *promise)
 	else {
 		const std::string& name = j["name"];
 		const std::string& type = j["type"];
-		IProcessor* processor = GetProcessor(name, type);
-		if (!processor) {
+		IApp* app = GetApp(name, type);
+		if (!app) {
 			promise->reject("processor not exists.");
 			return;
 		}
-		processor->On(promise);
+		app->On(promise);
 		return;
 	}
 
@@ -152,33 +163,35 @@ void WebStreamer::OnPromise(Promise *promise)
 
 void WebStreamer::CreateProcessor(Promise* promise)
 {
-	const json& j = promise->param();
+	const json& j = promise->meta();
 	std::string name = j["name"];
 	std::string type = j["type"];
 	std::string uname = name + "@" + type;
 
-	IProcessor* processor = GetProcessor(name, type);
-	if (processor)
+	IApp* app = GetApp(name, type);
+	if (app)
 	{
 		promise->reject(uname + " was an exist processor.");
 		return;
 	}
 
-	processor = Factory::Instantiate(type, name, this);
-	if (!processor)
+	app = Factory::Instantiate(type, name, this);
+	if (!app)
 	{
 		promise->reject("type not supported");
 		return;
 	}
 	
 
-	if( processor->Initialize(promise) )
+	if(app->Initialize(promise) )
 	{
-		processors_[uname] = processor;
+		apps_[uname] = app;
 	}
 	else
 	{
-		delete processor;
+		delete app;
+		promise->reject("app initialize failed.");
+		return;
 	}
 }
 void WebStreamer::DestroyProcessor(Promise* promise) {
@@ -187,41 +200,91 @@ void WebStreamer::DestroyProcessor(Promise* promise) {
 
 }
 
+static gboolean pool_cleanup(GstRTSPSessionPool* *pool)
+{
+	if (*pool)
+	{
+		gst_rtsp_session_pool_cleanup(*pool);
+		return G_SOURCE_CONTINUE;
+	}
+	return G_SOURCE_REMOVE;
+
+}
 
 std::string WebStreamer::InitRTSPServer(const nlohmann::json* option)
 {
+	std::string error;
 	//not start rtsp server
 	if (!option || option->find("rtsp_server") == option->cend())
 	{
 		return "";
 	}
 	const nlohmann::json& opt = *option;
-
-	rtsp_server_ = gst_rtsp_server_new();
-	if (!rtsp_server_) {
-		return "create RTSP server failed.";
-	}
-
-	gint port = 554;
 	auto rtsp_server = opt["rtsp_server"];
-	json::const_iterator it = rtsp_server.find("port");
-	if (it != rtsp_server.cend())
-	{
-		port = rtsp_server["port"];
-	}
-	char s[128];
-	
-	sprintf(s, "%d", port);
-	gst_rtsp_server_set_service(rtsp_server_, s);
 
 	gint max_sessions = rtsp_server["max_sessions"];
 	rtsp_session_pool_ = gst_rtsp_session_pool_new();
 	gst_rtsp_session_pool_set_max_sessions(rtsp_session_pool_, max_sessions);
 
-	gst_rtsp_server_set_session_pool(rtsp_server_, rtsp_session_pool_);
 
-	gst_rtsp_server_attach(rtsp_server_, WebStreamer::main_context);
+	gint port = 554;
+	json::const_iterator it = rtsp_server.find("port");
+	if (it != rtsp_server.cend())
+	{
+		port = rtsp_server["port"];
+		RTSPServer* server = new RTSPServer(RTSPServer::RFC7826);
+		if (!server) 
+		{
+			error = "create RTSP Server failed ";
+			goto _failed;
+		}
 
+		if (!server->Initialize(rtsp_session_pool_, port))
+		{
+			error = "initialize RTSP Server failed ";
+			goto _failed;
+		}
+		rtspserver_[RTSPServer::RFC7826] = server;
+	}
+
+	it   = rtsp_server.find("onvif_port");
+	if (it != rtsp_server.cend())
+	{
+		port = rtsp_server["onvif_port"];
+		RTSPServer* server = new RTSPServer(RTSPServer::ONVIF);
+		if (!server)
+		{
+			error = "create Onvif RTSP Server failed ";
+			goto _failed;
+		}
+
+		if (!server->Initialize(rtsp_session_pool_, port))
+		{
+			error = "initialize Onvif RTSP Server failed ";
+			goto _failed;
+		}
+		rtspserver_[RTSPServer::ONVIF] = server;
+	}
+
+
+	pool_clean_id_=g_timeout_add_seconds(10, (GSourceFunc)pool_cleanup, &rtsp_session_pool_);
 
 	return "";//success
+_failed:
+	for (int i = 0; i < RTSPServer::SIZE; i++)
+	{
+		if (rtspserver_[i])
+		{
+			rtspserver_[i]->Destroy();
+			delete rtspserver_[i];
+			rtspserver_[i] = nullptr;
+		}
+	}
+
+	if (rtsp_session_pool_)
+	{
+		g_object_unref(rtsp_session_pool_);
+		rtsp_session_pool_ = NULL;
+	}
+	return error;
 }
