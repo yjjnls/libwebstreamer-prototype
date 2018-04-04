@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <gst/gst.h>
-#include "node_plugin_interface.h"
+#include "plugin_interface.h"
 #include "webstreamer.h"
 
 #include "nlohmann/json.hpp"
@@ -10,17 +10,25 @@ static WebStreamer* _webstreamer = NULL;
 #define __VERSION__ "0.1.1"
 
 
-static void init(const void *self, const void *data, size_t size, void(*cb)(const void *self, int status, char *msg))
+static void init(const void*  iface,
+	const void*               context,
+	const plugin_buffer_t*    data,
+	plugin_callback_fn        callback)
 {
+	plugin_interface_t* self = (plugin_interface_t *)iface;
+
 	nlohmann::json j;
-	if (data && size)
+	if (data)
 	{
 		try {
 
-			j = nlohmann::json::parse(std::string((const char*)data, size));
+			j = nlohmann::json::parse(std::string((const char*)data->data, data->size));
 		}
 		catch (std::exception& ){
-			cb(self, 1, ERRORMSG("init", "invalid option format(should be json)."));
+			plugin_buffer_t err;
+			plugin_buffer_string_set(&err, 
+				const_error_msg("init", "invalid option format(should be json)."));
+			callback(self, context, 1, &err);
 			return;
 		}
 	}
@@ -29,66 +37,87 @@ static void init(const void *self, const void *data, size_t size, void(*cb)(cons
 	_webstreamer = new WebStreamer();
 	if (!_webstreamer->Initialize(j.is_null() ? NULL :&j ,error))
 	{
-		cb(self, 1, ERRORMSG("init","gstreamer initialize failed.") );
+		plugin_buffer_t err;
+		plugin_buffer_string_set(&err,
+			const_error_msg("init", "gstreamer initialize failed."));
+		callback(self, context, 1, &err);
 		return;
 	}
 
-	if (cb)
+	if (callback)
 	{
-		cb(self, 0, ">>>>>Initialize done!<<<<<");
+		callback(self, context, 0, NULL);
 	}
 }
 #include <iostream>
 
 #include <exception>
 
-static void call(const void *self, const void *context,
-	const void *data, size_t size,
-	const void *meta, size_t msize)
+
+static void call(const void* iface,
+	const void*               context,
+	plugin_buffer_t*          data,
+	plugin_buffer_t*          meta,
+	plugin_callback_fn        callback)
 {
-	node_plugin_interface_t* iface=(node_plugin_interface_t*)self;
-	if (!meta || !msize)
+	plugin_interface_t* self = (plugin_interface_t *)iface;
+
+	if (!meta || !meta->data || !meta->size)
 	{
-		iface->call_return(iface, context, "empty meta", 0, 0, NULL, NULL);
+		plugin_buffer_t err;
+		plugin_buffer_string_set(&err,
+			const_error_msg("call", "action not specified."));
+		callback(self, context, 1, &err);
 		return;
 	}
 	nlohmann::json jmeta;
 	try {
-		jmeta = nlohmann::json::parse(std::string((const char*)meta, (std::size_t)msize));
+		const char* begin = (const char*)meta->data;
+		const char* end = begin + meta->size;
+
+		jmeta = nlohmann::json::parse(begin,end);
 	}
 	catch (std::exception&) {
-		iface->call_return(iface, context, "invalid meta json string.", 0, 0, NULL, NULL);
+		plugin_buffer_t err;
+		plugin_buffer_string_set(&err,
+			const_error_msg("call", "invalid meta json string."));
+		callback(self, context, 1, &err);
 		return;
 	}
 
 	nlohmann::json jdata;
 	try {
-		if (data && size) {
-			jdata = nlohmann::json::parse(std::string((const char*)data, (std::size_t)size));
+		if (data && data->data && data->size) {
+			const char* begin = (const char*)data->data;
+			const char* end = begin + data->size;
+			jdata = nlohmann::json::parse(begin,end);
 		}
 	}
 	catch (std::exception&) {
-		iface->call_return(iface, context, "invalid data json string.", 0, 0, NULL, NULL);
+		plugin_buffer_t err;
+		plugin_buffer_string_set(&err,
+			const_error_msg("call", "invalid data json string."));
+		callback(self, context, 1, &err);
 		return;
 	}
 
-	Promise* promise = new Promise((void*)self, context, jmeta,jdata);
+	Promise* promise = new Promise((void*)self, context,callback, jmeta,jdata);
 	_webstreamer->Exec(promise);
 	promise = nullptr;
 
 }
 
-static void terminate(const void *self, void(*cb)(const void *self, int status, char *msg))
+static void terminate(const void* iface,
+	const void*               context,
+	plugin_callback_fn        callback)
 {
-//	owr_quit();
-//	printf("gstreamer quite.\n");
+	plugin_interface_t* self = (plugin_interface_t *)iface;
+
 	_webstreamer->Terminate();
-	if (cb)
+	if (callback)
 	{
-		cb(self, 0, ">>>>>Terminate done!<<<<<");
-		//error callback
-		// cb(self, 1 ,"Terminate error!");
+		callback(self, context,0,NULL);
 	}
 }
 
-NODE_PLUGIN_IMPL(__VERSION__, init, call, terminate)
+PLUGIN_INTERFACE(__VERSION__, init, call, terminate)

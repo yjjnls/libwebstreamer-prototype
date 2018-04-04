@@ -1,8 +1,7 @@
 #include "webstreamer.h"
-//#include "avanalyzer.h"
+#include "elementwatcher.h"
 using json = nlohmann::json;
 
-#if 0
 
 
 
@@ -12,8 +11,8 @@ using json = nlohmann::json;
 static gboolean
 message_handler(GstBus * bus, GstMessage * message, gpointer data)
 {
-//	AVAnalyzer* This = static_cast<AVAnalyzer*>(data);
-//	This->OnMessage(bus, message);
+	ElementWatcher* This = static_cast<ElementWatcher*>(data);
+	This->OnMessage(bus, message);
 
 	return TRUE;
 }
@@ -21,31 +20,36 @@ message_handler(GstBus * bus, GstMessage * message, gpointer data)
 
 
 
-bool AVAnalyzer::Initialize(Promise* promise)
+bool ElementWatcher::Initialize(Promise* promise)
 {
 	
 	promise->resolve();
 	return true;
 }
 
-void AVAnalyzer::On(Promise* promise)
+void ElementWatcher::On(Promise* promise)
 {
-//	const json& j = promise->param();
-//	std::string action = j["action"];
-//	if (action == "startup")
-//	{
-//		Startup(promise);
-//	}
-//	else if (action == "stop")
-//	{
-//		Stop(promise);
-//	}
+	const json& j = promise->meta();
+	std::string action = j["action"];
+	if (action == "startup")
+	{
+		Startup(promise);
+	}
+	else if (action == "stop")
+	{
+		Stop(promise);
+	}
 }
 
-void AVAnalyzer::Startup(Promise* promise)
+void ElementWatcher::Startup(Promise* promise)
 {
-//	GError* error = NULL;
-//	const json& j = promise->param();
+	GError* error = NULL;
+	
+	const json& j = promise->data();
+	const std::string& launch = j["launch"];
+
+
+
 //	std::string action = j["action"];
 //	if (j.find("content") == j.cend())
 //	{
@@ -57,32 +61,39 @@ void AVAnalyzer::Startup(Promise* promise)
 //
 //
 //	const std::string& launch = opt["launch"];
-//	/* Build the pipeline */
-//	pipeline_ = gst_pipeline_new("pipeline"); 
-//	GstElement* bin = gst_parse_launch(launch.c_str(), &error);
-//	gst_bin_add(GST_BIN(pipeline_), bin);
-//
-//	//spectrum
-//	if (opt.find("spectrum") != opt.end())
-//	{
-//		Spectrum(opt["spectrum"]);
+	/* Build the pipeline */
+	pipeline_ = gst_pipeline_new("pipeline"); 
+	//GstElement* bin = gst_parse_launch(launch.c_str(), &error);
+	//char lst[] = ""\
+	//	"audiotestsrc ! capsfilter caps=\"application/x-rtp,media=audio\" "
+	//	"! rtppcmadepay ! decodebin ! audioconvert !spectrum !spectrascope ";
+
+	char lst[] = ""\
+		"audiotestsrc ! audioconvert !spectrum name=spectrum ! spectrascope ! autovideosink";
+	GstElement* bin = gst_parse_launch(lst, &error);
+	gst_bin_add(GST_BIN(pipeline_), bin);
+
+	//spectrum
+	//if (opt.find("spectrum") != opt.end())
+	//{
+		Spectrum(j);
 //	}
-//	gst_element_set_state(pipeline_, GST_STATE_PLAYING);
-//
-//	GstBus* bus = gst_element_get_bus(pipeline_);
+	gst_element_set_state(pipeline_, GST_STATE_PLAYING);
+
+	GstBus* bus = gst_element_get_bus(pipeline_);
 //	//GstBus* bus2 = gst_element_get_bus(bin);
-//	gst_bus_add_watch(bus, message_handler, this);
-//	gst_object_unref(bus);
+	gst_bus_add_watch(bus, message_handler, this);
+	gst_object_unref(bus);
 //	//gst_element_set_bus(bin, bus);
 //	//gst_bus_add_watch(bus, message_handler, this);
-//
-//	promise->resolve();
-//
+
+	promise->resolve();
+
 
 }
 
 
-void AVAnalyzer::Stop(Promise* promise)
+void ElementWatcher::Stop(Promise* promise)
 {
 //	const json& j = promise->param();
 //	std::string action = j["action"];
@@ -94,19 +105,19 @@ void AVAnalyzer::Stop(Promise* promise)
 
 
 
-void AVAnalyzer::Destroy(Promise* promise)
+void ElementWatcher::Destroy(Promise* promise)
 {
 
 }
 
 
-void AVAnalyzer::Spectrum(const nlohmann::json::value_type& j)
+void ElementWatcher::Spectrum(const nlohmann::json::value_type& j)
 {
 	GstElement* spectrum = gst_bin_get_by_name(GST_BIN(pipeline_), "spectrum");
 
-	guint bands     = j["bands"];
-	gint threshold = j["threshold"];
-	guint interval  = j["interval"];
+	guint bands = 128;// j["bands"];
+	gint threshold = -80;// j["threshold"];
+	//guint interval  = j["interval"];
 	
 	g_object_set(G_OBJECT(spectrum), "bands", bands, "threshold", threshold, //"interval", interval,
 			"post-messages", TRUE, "message-phase", TRUE, NULL);
@@ -114,7 +125,7 @@ void AVAnalyzer::Spectrum(const nlohmann::json::value_type& j)
 }
 
 
-void AVAnalyzer::OnMessage(GstBus * bus, GstMessage * message)
+void ElementWatcher::OnMessage(GstBus * bus, GstMessage * message)
 {
 	if (message->type == GST_MESSAGE_ELEMENT) {
 		const GstStructure *s = gst_message_get_structure(message);
@@ -136,6 +147,7 @@ void AVAnalyzer::OnMessage(GstBus * bus, GstMessage * message)
 
 			magnitudes = gst_structure_get_value(s, "magnitude");
 			phases = gst_structure_get_value(s, "phase");
+			guint n = gst_value_list_get_size(magnitudes);
 #define AUDIOFREQ 32000 
 			for (i = 0; i < 128; ++i) {
 				freq = (gdouble)((AUDIOFREQ / 2) * i + AUDIOFREQ / 4) / 128;
@@ -143,7 +155,7 @@ void AVAnalyzer::OnMessage(GstBus * bus, GstMessage * message)
 				phase = gst_value_list_get_value(phases, i);
 
 				if (mag != NULL && phase != NULL) {
-					g_print("band %d (freq %g): magnitude %f dB phase %f\n", i, freq,
+					g_print("****  band %d (freq %g): magnitude %f dB phase %f\n", i, freq,
 						g_value_get_float(mag), g_value_get_float(phase));
 				}
 			}
@@ -152,4 +164,3 @@ void AVAnalyzer::OnMessage(GstBus * bus, GstMessage * message)
 	}
 }
 
-#endif

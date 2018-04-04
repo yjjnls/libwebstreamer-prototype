@@ -76,9 +76,10 @@ static gpointer mainloop(WebStreamerInitialization *wsi)
 
 
 
-WebStreamer::WebStreamer()
+WebStreamer::WebStreamer(plugin_interface_t* iface)
 	: rtsp_session_pool_(NULL)
 	, pool_clean_id_(0)
+	, iface_(iface)
 {
 	for (int i=0; i < RTSPServer::SIZE ;i++)
 	{
@@ -287,4 +288,17 @@ _failed:
 		rtsp_session_pool_ = NULL;
 	}
 	return error;
+}
+
+
+#include "plugin_interface.h"
+void WebStreamer::Notify(plugin_buffer_t* data, plugin_buffer_t* meta)
+{
+	if (!this->iface_ || !this->iface_->notify || (!data && !meta) )
+	{
+		return;
+	}
+
+	iface_->notify(iface_,data, meta);
+
 }

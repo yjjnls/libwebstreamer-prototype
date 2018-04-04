@@ -4,22 +4,28 @@
 #define _LIBWEBSTREAMER_PROMISE_H_
 
 #include <gst/gst.h>
-#include "node_plugin_interface.h"
+#include "plugin_interface.h"
 #include "nlohmann/json.hpp"
 
 class WebStreamer;
 class IApp;
 class Promise
 {
+	struct buffer_t
+	{
+
+	};
 public:
-	Promise(void* iface, const void* context, nlohmann::json jmeta, nlohmann::json jdata)
-		: iface_((node_plugin_interface_t *)iface)
+	Promise(void* iface, const void* context, plugin_callback_fn callback,
+		nlohmann::json jmeta, nlohmann::json jdata)
+		: iface_((plugin_interface_t *)iface)
 		, context_(context)
 		, jmeta_(jmeta)
 		, jdata_(jdata)
 		, responsed_(false)
 		, app_(nullptr)
 		, webstreamer_(nullptr)
+		, callback_(callback)
 	{
 	}
 
@@ -28,9 +34,10 @@ public:
 			return;//response repated
 		}
 
-		std::string retval = param.dump();
-		iface_->call_return(iface_, context_, 
-			retval.c_str(), retval.size(), 0, NULL, NULL);
+		const std::string& s = param.dump();
+		plugin_buffer_t data;
+		plugin_buffer_string_set(&data, s.c_str());
+		callback_(iface_, context_, 1, &data);
 	}
 
 	void resolve() {
@@ -38,14 +45,17 @@ public:
 			return;//response repated
 		}
 
-		iface_->call_return(iface_, context_,NULL,0, 0, NULL, NULL);
+		callback_(iface_, context_, 0,NULL);
 	}
 
 	void reject(const std::string& message) {
 		if (responsed_) {
 			return;//response repated
 		}
-		iface_->call_return(iface_, context_, message.c_str(),message.size(), 1, NULL, NULL);
+		plugin_buffer_t data;
+		plugin_buffer_string_set(&data, message.c_str());
+		callback_(iface_, context_, 1, &data);
+
 	}
 
 	const nlohmann::json& data() const
@@ -72,13 +82,14 @@ protected:
 
 private:
 
-	node_plugin_interface_t * iface_;
+	plugin_interface_t*       iface_;
 	const void*               context_;
 	nlohmann::json            jdata_;
 	nlohmann::json            jmeta_;
 	bool                      responsed_;
 	WebStreamer*              webstreamer_;
 	IApp*                     app_;
+	plugin_callback_fn        callback_;
 
 
 };

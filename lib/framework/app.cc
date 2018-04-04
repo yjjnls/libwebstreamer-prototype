@@ -1,5 +1,5 @@
 #include "app.h"
-
+#include "../webstreamer.h"
 
 bool IApp::Initialize(Promise* promise)
 {
@@ -22,4 +22,16 @@ bool IApp::Initialize(Promise* promise)
 void IApp::Destroy(Promise* promise)
 {
 
+}
+
+
+void IApp::Notify(const nlohmann::json& data, const nlohmann::json& meta)
+{
+	const std::string& jdata = data.dump();
+	const std::string& jmeta = meta.dump();
+	plugin_buffer_t d;
+	plugin_buffer_t m;
+	plugin_buffer_string_set(&d, jdata.c_str());
+	plugin_buffer_string_set(&m, jmeta.c_str());
+	this->webstreamer_->Notify(&d, &m);
 }

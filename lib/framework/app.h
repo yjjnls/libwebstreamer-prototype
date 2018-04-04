@@ -26,7 +26,8 @@ public:
 
 	virtual const char* type() const = 0;
 	virtual std::string uname() = 0;
-
+	
+	virtual void Notify(const nlohmann::json& data, const nlohmann::json& meta);
 	WebStreamer& webstreamer() { return *webstreamer_; }
 protected:
 

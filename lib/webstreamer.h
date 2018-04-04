@@ -11,13 +11,14 @@
 #include <map>
 
 #include "app/rtsptestserver.h"
-#include "app/avanalyzer.h"
+#include "app/elementwatcher.h"
 
 #include "framework/rtspserver.h"
 
-#define ERRORMSG(name,message)\
-   "{\"name\": \"" name "\", \"message\": \"" message "\"}"
-
+//#define ERRORMSG(name,message)\
+//   "{\"catlog\": \"" name "\",\"name\": \"" name "\", \"message\": \"" message "\"}"
+#define const_error_msg(type,msg) \
+    "{\"type\": \"" type "\", \"message\": \"" msg "\"}"
 
 
 
@@ -62,11 +63,13 @@ struct AppFactory<Last>
 
 class RTSPService;
 
+struct plugin_interface_t;
+struct plugin_buffer_t;
 
 class WebStreamer {
 
 public:
-	WebStreamer();
+	WebStreamer(plugin_interface_t* iface);
 	bool Initialize(const nlohmann::json* option, std::string& error);
 	void Terminate();
 
@@ -84,8 +87,10 @@ public:
 		}
 		return rtspserver_[type];
 	}
+
+	void Notify(plugin_buffer_t* data, plugin_buffer_t* meta);
 protected:
-	typedef AppFactory< RTSPTestServer, AVAnalyzer
+	typedef AppFactory< RTSPTestServer, ElementWatcher
 	> Factory;
 
 	void CreateProcessor(Promise* promise);
@@ -122,6 +127,7 @@ private:
 	GstRTSPSessionPool*  rtsp_session_pool_;
 	guint pool_clean_id_;
 	std::map<std::string, IApp*> apps_;
+	plugin_interface_t* iface_;
 };
 
 #endif
