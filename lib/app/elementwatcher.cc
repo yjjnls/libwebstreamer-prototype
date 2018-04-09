@@ -64,8 +64,14 @@ void ElementWatcher::Startup(Promise* promise)
 		GstElement* element = gst_bin_get_by_name(GST_BIN(pipeline_), name.c_str());
 		if (element) {
 			if (type == "spectrum") {
-				g_object_set(G_OBJECT(element), "post-messages", TRUE, "message-phase", TRUE, NULL);
+				//g_object_set(G_OBJECT(element), "post-messages", TRUE, "message-phase", TRUE, NULL);
+				guint bands = 128;// j["bands"];
+				gint threshold = -80;// j["threshold"];
+									 //guint interval  = j["interval"];
 
+
+				g_object_set(G_OBJECT(element), "bands", bands, "threshold", threshold, //"interval", interval,
+					"post-messages", TRUE, "message-phase", TRUE, NULL);
 			}
 			g_object_unref(element);
 		}
@@ -135,7 +141,7 @@ void ElementWatcher::OnMessage(GstBus * bus, GstMessage * message)
 			auto& val = it.value();
 			auto& type = val["type"];
 
-			if (ename != it.key())
+			if (name != ename)
 				continue;
 			if( type == "spectrum")
 			{

@@ -12,11 +12,11 @@
 
 #include "app/rtsptestserver.h"
 #include "app/elementwatcher.h"
-
+#include "app/rtsptestclient.h"
 #include "framework/rtspserver.h"
 
-//#define ERRORMSG(name,message)\
-//   "{\"catlog\": \"" name "\",\"name\": \"" name "\", \"message\": \"" message "\"}"
+
+
 #define const_error_msg(type,msg) \
     "{\"type\": \"" type "\", \"message\": \"" msg "\"}"
 
@@ -90,7 +90,8 @@ public:
 
 	void Notify(plugin_buffer_t* data, plugin_buffer_t* meta);
 protected:
-	typedef AppFactory< RTSPTestServer, ElementWatcher
+	typedef AppFactory< RTSPTestServer, ElementWatcher,
+		RTSPTestClient		
 	> Factory;
 
 	void CreateProcessor(Promise* promise);

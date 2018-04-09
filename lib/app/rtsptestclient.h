@@ -13,24 +13,10 @@ public:
 
 		RTSPTestClient(const std::string& name, WebStreamer* ws)
 		: ElementWatcher(name, ws)
-		, pipeline_(NULL)
+		
 	{
 
 	}
-
-//	void On(Promise* promise);
-//	bool Initialize(Promise* promise);
-//	void Destroy(Promise* promise);
-//
-//	virtual void OnMessage(GstBus * bus, GstMessage * message);
-//protected:
-//	void Startup(Promise* promise);
-//	void Stop(Promise* promise);
-//	void Spectrum(const nlohmann::json::value_type& j);
-//
-private:
-
-	GstElement * pipeline_;
 
 
 };
