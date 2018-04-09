@@ -47,45 +47,43 @@ void ElementWatcher::Startup(Promise* promise)
 	
 	const json& j = promise->data();
 	const std::string& launch = j["launch"];
+	auto  elements = j["elements"];
 
-
-
-//	std::string action = j["action"];
-//	if (j.find("content") == j.cend())
-//	{
-//		promise->reject("null param.");
-//		return;
-//	}
-//
-//	auto opt = j["content"];
-//
-//
-//	const std::string& launch = opt["launch"];
 	/* Build the pipeline */
 	pipeline_ = gst_pipeline_new("pipeline"); 
-	//GstElement* bin = gst_parse_launch(launch.c_str(), &error);
-	//char lst[] = ""\
-	//	"audiotestsrc ! capsfilter caps=\"application/x-rtp,media=audio\" "
-	//	"! rtppcmadepay ! decodebin ! audioconvert !spectrum !spectrascope ";
-
-	char lst[] = ""\
-		"audiotestsrc ! audioconvert !spectrum name=spectrum ! spectrascope ! autovideosink";
-	GstElement* bin = gst_parse_launch(lst, &error);
+//	char lst[] = ""\
+//		"audiotestsrc ! audioconvert !spectrum name=spectrum ! spectrascope ! autovideosink";
+	GstElement* bin = gst_parse_launch(launch.c_str(), &error);
 	gst_bin_add(GST_BIN(pipeline_), bin);
 
-	//spectrum
-	//if (opt.find("spectrum") != opt.end())
-	//{
-		Spectrum(j);
-//	}
+	for (json::iterator it = elements.begin(); it != elements.end(); ++it) {
+		std::string& name = it.key();
+		auto& val = it.value();
+		auto& type = val["type"];
+
+		GstElement* element = gst_bin_get_by_name(GST_BIN(pipeline_), name.c_str());
+		if (element) {
+			if (type == "spectrum") {
+				g_object_set(G_OBJECT(element), "post-messages", TRUE, "message-phase", TRUE, NULL);
+
+			}
+			g_object_unref(element);
+		}
+		else
+		{
+			//FIXME: release the created resources.
+			promise->reject("can not get element " + name);
+			return;
+
+		}
+	}
+	
+	this->watch_list_ = elements;
 	gst_element_set_state(pipeline_, GST_STATE_PLAYING);
 
 	GstBus* bus = gst_element_get_bus(pipeline_);
-//	//GstBus* bus2 = gst_element_get_bus(bin);
 	gst_bus_add_watch(bus, message_handler, this);
 	gst_object_unref(bus);
-//	//gst_element_set_bus(bin, bus);
-//	//gst_bus_add_watch(bus, message_handler, this);
 
 	promise->resolve();
 
@@ -119,6 +117,7 @@ void ElementWatcher::Spectrum(const nlohmann::json::value_type& j)
 	gint threshold = -80;// j["threshold"];
 	//guint interval  = j["interval"];
 	
+	
 	g_object_set(G_OBJECT(spectrum), "bands", bands, "threshold", threshold, //"interval", interval,
 			"post-messages", TRUE, "message-phase", TRUE, NULL);
 
@@ -130,8 +129,22 @@ void ElementWatcher::OnMessage(GstBus * bus, GstMessage * message)
 	if (message->type == GST_MESSAGE_ELEMENT) {
 		const GstStructure *s = gst_message_get_structure(message);
 		const gchar *name = gst_structure_get_name(s);
-		GstClockTime endtime;
 
+		for (json::iterator it = watch_list_.begin(); it != watch_list_.end(); ++it) {
+			std::string& ename = it.key();
+			auto& val = it.value();
+			auto& type = val["type"];
+
+			if (ename != it.key())
+				continue;
+			if( type == "spectrum")
+			{
+				OnSpectrum(ename, val, s);
+
+			}
+
+		}
+#if 0
 		if (strcmp(name, "spectrum") == 0) {
 			const GValue *magnitudes;
 			const GValue *phases;
@@ -161,6 +174,47 @@ void ElementWatcher::OnMessage(GstBus * bus, GstMessage * message)
 			}
 			g_print("\n");
 		}
+#endif
 	}
 }
 
+void ElementWatcher::OnSpectrum(const std::string& name, 
+	const nlohmann::json::value_type& value, const GstStructure * s)
+{
+	GstClockTime endtime;
+	const GValue *magnitudes;
+	const GValue *phases;
+	const GValue *mag, *phase;
+	guint size;
+
+	if (!gst_structure_get_clock_time(s, "endtime", &endtime))
+		endtime = GST_CLOCK_TIME_NONE;
+
+	magnitudes = gst_structure_get_value(s, "magnitude");
+	phases = gst_structure_get_value(s, "phase");
+	size = gst_value_list_get_size(magnitudes);
+	json data;
+
+
+	json::array_t mags;
+	for (guint i = 0; i < size; ++i) {
+
+		mag = gst_value_list_get_value(magnitudes, i);
+		phase = gst_value_list_get_value(phases, i);
+		mags.push_back(g_value_get_float(mag));
+		//if (mag != NULL && phase != NULL) {
+		//	g_print("****  band %d (freq %g): magnitude %f dB phase %f\n", i, freq,
+		//		g_value_get_float(mag), g_value_get_float(phase));
+		//}
+	}
+	data["name"] = name;
+	data["endtime"] = endtime;
+	data["magnitude"] = mags;
+
+	json meta;
+	meta["topic"] = "spectrum";
+	meta["origin"] = this->uname();
+
+	Notify(data, meta);
+
+}

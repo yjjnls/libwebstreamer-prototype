@@ -34,7 +34,7 @@ static void init(const void*  iface,
 	}
 
 	std::string error;
-	_webstreamer = new WebStreamer();
+	_webstreamer = new WebStreamer(self);
 	if (!_webstreamer->Initialize(j.is_null() ? NULL :&j ,error))
 	{
 		plugin_buffer_t err;

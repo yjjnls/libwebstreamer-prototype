@@ -1,8 +1,8 @@
 
-#ifndef _LIBWEBSTREAMER_MULTIFILE_REPORT_H_
-#define _LIBWEBSTREAMER_MULTIFILE_REPORT_H_
+#ifndef _LIBWEBSTREAMER_ELEMENT_WATCHER_H_
+#define _LIBWEBSTREAMER_ELEMENT_WATCHER_H_
 
-
+#include <nlohmann/json.hpp>
 #include <framework/app.h>
 class ElementWatcher : public IApp
 {
@@ -27,11 +27,12 @@ protected:
 	void Stop(Promise* promise);
 	void Spectrum(const nlohmann::json::value_type& j);
 
+	void OnSpectrum(const std::string& name, const nlohmann::json::value_type& value, const GstStructure * message);
 private:
 
 	GstElement * pipeline_;
 
-
+	nlohmann::json watch_list_;
 };
 
 

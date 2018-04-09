@@ -179,7 +179,7 @@ void WebStreamer::CreateProcessor(Promise* promise)
 	app = Factory::Instantiate(type, name, this);
 	if (!app)
 	{
-		promise->reject("type not supported");
+		promise->reject(type + " : type not supported");
 		return;
 	}
 	
