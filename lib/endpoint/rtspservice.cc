@@ -22,6 +22,26 @@ static  void Notify(gpointer      data, GObject      *where_the_object_was)
 	g_print(" data : %x\n", data);
 	g_print(" where_the_object_was : %x\n", where_the_object_was);
 }
+void IRTSPService::on_tear_down(GstRTSPClient *client, GstRTSPContext *ctx, gpointer user_data)
+{
+    IRTSPService *rtsp_service = static_cast<IRTSPService *>(user_data);
+    auto it = std::find_if(rtsp_service->clients_.begin(), rtsp_service->clients_.end(),
+                        [client](GstRTSPClient *curr_client) {
+                            return (curr_client == client);
+                        });
+    if (it != rtsp_service->clients_.end())
+    {
+        rtsp_service->clients_.erase(it);
+        GST_DEBUG("[rtsp-server] client: %p removed", client);
+    }
+}
+void IRTSPService::on_client_connected(GstRTSPServer *gstrtspserver, GstRTSPClient *client, gpointer user_data)
+{
+	IRTSPService * rtsp_service = static_cast<IRTSPService *>(user_data);
+	rtsp_service->clients_.push_back(client);
+	g_signal_connect(client, "teardown-request", (GCallback)(rtsp_service->on_tear_down), user_data);
+	GST_DEBUG("[rtsp-server] client: %p connected", client);
+}
 bool IRTSPService::Launch(const std::string& path, const std::string& launch,
 	GCallback media_constructed, GCallback media_configure)
 {
@@ -50,13 +70,21 @@ bool IRTSPService::Launch(const std::string& path, const std::string& launch,
 	GST_DEBUG("[rtsp-server] %s launched to %s",name_.c_str(),path.c_str());
 	path_ = path;
 	g_object_weak_ref(G_OBJECT(factory_), Notify, factory_);
+
+	g_signal_connect(server, "client-connected", (GCallback)on_client_connected, (gpointer)(this));
+	
 	return true;
 }
 
 
 bool IRTSPService::Stop()
 {
-	if (factory_)
+    if (!clients_.empty())
+    {
+        for (auto client : clients_)
+            gst_rtsp_client_close(client);
+    }
+    if (factory_)
 	{
 		GstRTSPServer* server = server_->server();
 		GstRTSPMountPoints *mount_points = gst_rtsp_server_get_mount_points(server);
@@ -64,7 +92,7 @@ bool IRTSPService::Stop()
 		gst_rtsp_mount_points_remove_factory(mount_points, path_.c_str());
 		g_object_unref(mount_points);
 
-		GST_FIXME("mount point may be held, can not be cleanup at once.");
+		// GST_FIXME("mount point may be held, can not be cleanup at once.");
 		
 		factory_ = NULL;
 	}

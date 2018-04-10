@@ -102,7 +102,8 @@ void ElementWatcher::Stop(Promise* promise)
 //	const json& j = promise->param();
 //	std::string action = j["action"];
 //
-//	promise->resolve();
+	gst_element_set_state(pipeline_, GST_STATE_NULL);
+	promise->resolve();
 
 
 }
@@ -203,19 +204,27 @@ void ElementWatcher::OnSpectrum(const std::string& name,
 
 
 	json::array_t mags;
+	json::array_t freqs;
+	gdouble freq;
+	#define AUDIOFREQ 32000
 	for (guint i = 0; i < size; ++i) {
-
+		freq = (gdouble) ((AUDIOFREQ / 2) * i + AUDIOFREQ / 4) / 128;
+		// printf("-----freq:%f\n",freq);
 		mag = gst_value_list_get_value(magnitudes, i);
 		phase = gst_value_list_get_value(phases, i);
 		mags.push_back(g_value_get_float(mag));
+		freqs.push_back(freq);
 		//if (mag != NULL && phase != NULL) {
 		//	g_print("****  band %d (freq %g): magnitude %f dB phase %f\n", i, freq,
 		//		g_value_get_float(mag), g_value_get_float(phase));
 		//}
 	}
+
 	data["name"] = name;
 	data["endtime"] = endtime;
 	data["magnitude"] = mags;
+	data["freq"] = freqs;
+
 
 	json meta;
 	meta["topic"] = "spectrum";
