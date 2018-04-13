@@ -1,0 +1,1247 @@
+{
+  "variant": {
+    "label": "Debug",
+    "keywordSettings": {
+      "buildType": "debug"
+    },
+    "description": "Emit debug information without performing optimizations"
+  },
+  "activeEnvironments": [
+    "Visual C++ 14.0 - amd64"
+  ],
+  "codeModel": {
+    "configurations": [
+      {
+        "name": "Debug",
+        "projects": [
+          {
+            "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+            "name": "FlatBuffers",
+            "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+            "targets": [
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Debug/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Debug/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Debug/flatbuffers.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "include/flatbuffers/code_generators.h",
+                      "include/flatbuffers/base.h",
+                      "include/flatbuffers/flatbuffers.h",
+                      "include/flatbuffers/hash.h",
+                      "include/flatbuffers/idl.h",
+                      "include/flatbuffers/util.h",
+                      "include/flatbuffers/reflection.h",
+                      "include/flatbuffers/reflection_generated.h",
+                      "include/flatbuffers/stl_emulation.h",
+                      "include/flatbuffers/flexbuffers.h",
+                      "include/flatbuffers/registry.h",
+                      "include/flatbuffers/minireflect.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /W4 /WX /wd4512 /wd4316 /MDd /Zi /Ob0 /Od /RTC1  ",
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/include"
+                      },
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/grpc"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/code_generators.cpp",
+                      "src/idl_parser.cpp",
+                      "src/idl_gen_text.cpp",
+                      "src/reflection.cpp",
+                      "src/util.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "flatbuffers.lib",
+                "linkFlags": "/machine:x64",
+                "linkerLanguage": "CXX",
+                "name": "flatbuffers",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "STATIC_LIBRARY"
+              }
+            ]
+          },
+          {
+            "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+            "name": "libwebstreamer",
+            "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+            "targets": [
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/lib/Debug/libwebstreamer.dll",
+                  "D:/Working/MyProject/libwebstreamer/build/lib/Debug/libwebstreamer.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/lib/Debug/libwebstreamer.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/lib",
+                "fileGroups": [
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MP /wd4819 /MDd /Zi /Ob0 /Od /RTC1  ",
+                    "defines": [
+                      "_CRT_NONSTDC_NO_DEPRECATE",
+                      "_CRT_SECURE_NO_DEPRECATE",
+                      "_SCL_SECURE_NO_WARNINGS",
+                      "libwebstreamer_EXPORTS"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/lib/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/gstreamer-1.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/glib-2.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/lib/glib-2.0/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "source/application/endpoint/rtspclient.cc",
+                      "source/application/endpoint/rtspserver.cc",
+                      "source/application/endpoint/testsink.cc",
+                      "source/application/endpoint/webrtc.cc",
+                      "source/application/endpoint/webrtc_manager.cc",
+                      "source/application/pipeline/livestream.cc",
+                      "source/dispatcher.cc",
+                      "source/framework/endpoint.cc",
+                      "source/framework/pipeline.cc",
+                      "source/framework/pipeline_manager.cc",
+                      "source/main.cc",
+                      "source/utils/pipejoint.cc",
+                      "source/utils/type_def.cc"
+                    ]
+                  },
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "source/utils/gstutility/gst_inter_sink.h",
+                      "source/utils/gstutility/gst_inter_src.h",
+                      "source/utils/gstutility/gst_rtsp_server.h",
+                      "include/fbs/common_generated.h",
+                      "include/fbs/livestreamer_generated.h",
+                      "include/fbs/webstreamer_generated.h",
+                      "include/node_plugin_interface.h",
+                      "include/application/endpoint/rtspclient.hpp",
+                      "include/application/endpoint/rtspserver.hpp",
+                      "include/application/endpoint/testsink.hpp",
+                      "include/application/endpoint/webrtc.hpp",
+                      "include/application/endpoint/webrtc_manager.hpp",
+                      "include/application/pipeline/livestream.hpp",
+                      "include/dispatcher.hpp",
+                      "include/framework/endpoint.hpp",
+                      "include/framework/pipeline.hpp",
+                      "include/framework/pipeline_manager.hpp",
+                      "include/utils/pipejoint.hpp",
+                      "include/utils/status_code.hpp",
+                      "include/utils/type_def.hpp",
+                      "CMakelists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /MDd /Zi /Ob0 /Od /RTC1  ",
+                    "defines": [
+                      "_CRT_NONSTDC_NO_DEPRECATE",
+                      "_CRT_SECURE_NO_DEPRECATE",
+                      "_SCL_SECURE_NO_WARNINGS",
+                      "libwebstreamer_EXPORTS"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/lib/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/gstreamer-1.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/glib-2.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/lib/glib-2.0/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "C",
+                    "sources": [
+                      "source/utils/gstutility/gst_inter_sink.c",
+                      "source/utils/gstutility/gst_inter_src.c",
+                      "source/utils/gstutility/gst_rtsp_server.c"
+                    ]
+                  }
+                ],
+                "fullName": "libwebstreamer.dll",
+                "linkFlags": "/machine:x64 /debug /INCREMENTAL",
+                "linkLibraries": "gstrtspserver-1.0.lib gstbase-1.0.lib gstreamer-1.0.lib gobject-2.0.lib glib-2.0.lib intl.lib ..\\flatbuffers\\Debug\\flatbuffers.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+                "linkPath": "-LIBPATH:C:\\cerbero\\x86_64\\lib",
+                "linkerLanguage": "CXX",
+                "name": "libwebstreamer",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/lib",
+                "type": "SHARED_LIBRARY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Debug/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Debug/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Debug/flatbuffers.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "include/flatbuffers/code_generators.h",
+                      "include/flatbuffers/base.h",
+                      "include/flatbuffers/flatbuffers.h",
+                      "include/flatbuffers/hash.h",
+                      "include/flatbuffers/idl.h",
+                      "include/flatbuffers/util.h",
+                      "include/flatbuffers/reflection.h",
+                      "include/flatbuffers/reflection_generated.h",
+                      "include/flatbuffers/stl_emulation.h",
+                      "include/flatbuffers/flexbuffers.h",
+                      "include/flatbuffers/registry.h",
+                      "include/flatbuffers/minireflect.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /W4 /WX /wd4512 /wd4316 /MDd /Zi /Ob0 /Od /RTC1  ",
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/include"
+                      },
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/grpc"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/code_generators.cpp",
+                      "src/idl_parser.cpp",
+                      "src/idl_gen_text.cpp",
+                      "src/reflection.cpp",
+                      "src/util.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "flatbuffers.lib",
+                "linkFlags": "/machine:x64",
+                "linkerLanguage": "CXX",
+                "name": "flatbuffers",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "STATIC_LIBRARY"
+              },
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakelists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+                "type": "UTILITY"
+              },
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": true,
+                    "sources": [
+                      "build/CMakeFiles/4df2b05a53502b397c8748c25159ec50/generate.stamp.rule"
+                    ]
+                  }
+                ],
+                "fullName": "ZERO_CHECK",
+                "name": "ZERO_CHECK",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+                "type": "UTILITY"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Release",
+        "projects": [
+          {
+            "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+            "name": "FlatBuffers",
+            "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+            "targets": [
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Release/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Release/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Release/flatbuffers.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "include/flatbuffers/code_generators.h",
+                      "include/flatbuffers/base.h",
+                      "include/flatbuffers/flatbuffers.h",
+                      "include/flatbuffers/hash.h",
+                      "include/flatbuffers/idl.h",
+                      "include/flatbuffers/util.h",
+                      "include/flatbuffers/reflection.h",
+                      "include/flatbuffers/reflection_generated.h",
+                      "include/flatbuffers/stl_emulation.h",
+                      "include/flatbuffers/flexbuffers.h",
+                      "include/flatbuffers/registry.h",
+                      "include/flatbuffers/minireflect.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /W4 /WX /wd4512 /wd4316 /MD /O2 /Ob2 /DNDEBUG  ",
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/include"
+                      },
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/grpc"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/code_generators.cpp",
+                      "src/idl_parser.cpp",
+                      "src/idl_gen_text.cpp",
+                      "src/reflection.cpp",
+                      "src/util.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "flatbuffers.lib",
+                "linkFlags": "/machine:x64",
+                "linkerLanguage": "CXX",
+                "name": "flatbuffers",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "STATIC_LIBRARY"
+              }
+            ]
+          },
+          {
+            "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+            "name": "libwebstreamer",
+            "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+            "targets": [
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/lib/Release/libwebstreamer.dll",
+                  "D:/Working/MyProject/libwebstreamer/build/lib/Release/libwebstreamer.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/lib/Release/libwebstreamer.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/lib",
+                "fileGroups": [
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MP /wd4819 /MD /O2 /Ob2 /DNDEBUG  ",
+                    "defines": [
+                      "_CRT_NONSTDC_NO_DEPRECATE",
+                      "_CRT_SECURE_NO_DEPRECATE",
+                      "_SCL_SECURE_NO_WARNINGS",
+                      "libwebstreamer_EXPORTS"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/lib/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/gstreamer-1.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/glib-2.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/lib/glib-2.0/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "source/application/endpoint/rtspclient.cc",
+                      "source/application/endpoint/rtspserver.cc",
+                      "source/application/endpoint/testsink.cc",
+                      "source/application/endpoint/webrtc.cc",
+                      "source/application/endpoint/webrtc_manager.cc",
+                      "source/application/pipeline/livestream.cc",
+                      "source/dispatcher.cc",
+                      "source/framework/endpoint.cc",
+                      "source/framework/pipeline.cc",
+                      "source/framework/pipeline_manager.cc",
+                      "source/main.cc",
+                      "source/utils/pipejoint.cc",
+                      "source/utils/type_def.cc"
+                    ]
+                  },
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "source/utils/gstutility/gst_inter_sink.h",
+                      "source/utils/gstutility/gst_inter_src.h",
+                      "source/utils/gstutility/gst_rtsp_server.h",
+                      "include/fbs/common_generated.h",
+                      "include/fbs/livestreamer_generated.h",
+                      "include/fbs/webstreamer_generated.h",
+                      "include/node_plugin_interface.h",
+                      "include/application/endpoint/rtspclient.hpp",
+                      "include/application/endpoint/rtspserver.hpp",
+                      "include/application/endpoint/testsink.hpp",
+                      "include/application/endpoint/webrtc.hpp",
+                      "include/application/endpoint/webrtc_manager.hpp",
+                      "include/application/pipeline/livestream.hpp",
+                      "include/dispatcher.hpp",
+                      "include/framework/endpoint.hpp",
+                      "include/framework/pipeline.hpp",
+                      "include/framework/pipeline_manager.hpp",
+                      "include/utils/pipejoint.hpp",
+                      "include/utils/status_code.hpp",
+                      "include/utils/type_def.hpp",
+                      "CMakelists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /MD /O2 /Ob2 /DNDEBUG  ",
+                    "defines": [
+                      "_CRT_NONSTDC_NO_DEPRECATE",
+                      "_CRT_SECURE_NO_DEPRECATE",
+                      "_SCL_SECURE_NO_WARNINGS",
+                      "libwebstreamer_EXPORTS"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/lib/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/gstreamer-1.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/glib-2.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/lib/glib-2.0/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "C",
+                    "sources": [
+                      "source/utils/gstutility/gst_inter_sink.c",
+                      "source/utils/gstutility/gst_inter_src.c",
+                      "source/utils/gstutility/gst_rtsp_server.c"
+                    ]
+                  }
+                ],
+                "fullName": "libwebstreamer.dll",
+                "linkFlags": "/machine:x64 /INCREMENTAL:NO",
+                "linkLibraries": "gstrtspserver-1.0.lib gstbase-1.0.lib gstreamer-1.0.lib gobject-2.0.lib glib-2.0.lib intl.lib ..\\flatbuffers\\Release\\flatbuffers.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+                "linkPath": "-LIBPATH:C:\\cerbero\\x86_64\\lib",
+                "linkerLanguage": "CXX",
+                "name": "libwebstreamer",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/lib",
+                "type": "SHARED_LIBRARY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Release/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Release/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/Release/flatbuffers.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "include/flatbuffers/code_generators.h",
+                      "include/flatbuffers/base.h",
+                      "include/flatbuffers/flatbuffers.h",
+                      "include/flatbuffers/hash.h",
+                      "include/flatbuffers/idl.h",
+                      "include/flatbuffers/util.h",
+                      "include/flatbuffers/reflection.h",
+                      "include/flatbuffers/reflection_generated.h",
+                      "include/flatbuffers/stl_emulation.h",
+                      "include/flatbuffers/flexbuffers.h",
+                      "include/flatbuffers/registry.h",
+                      "include/flatbuffers/minireflect.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /W4 /WX /wd4512 /wd4316 /MD /O2 /Ob2 /DNDEBUG  ",
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/include"
+                      },
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/grpc"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/code_generators.cpp",
+                      "src/idl_parser.cpp",
+                      "src/idl_gen_text.cpp",
+                      "src/reflection.cpp",
+                      "src/util.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "flatbuffers.lib",
+                "linkFlags": "/machine:x64",
+                "linkerLanguage": "CXX",
+                "name": "flatbuffers",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "STATIC_LIBRARY"
+              },
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakelists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+                "type": "UTILITY"
+              },
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": true,
+                    "sources": [
+                      "build/CMakeFiles/4df2b05a53502b397c8748c25159ec50/generate.stamp.rule"
+                    ]
+                  }
+                ],
+                "fullName": "ZERO_CHECK",
+                "name": "ZERO_CHECK",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+                "type": "UTILITY"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "MinSizeRel",
+        "projects": [
+          {
+            "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+            "name": "FlatBuffers",
+            "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+            "targets": [
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/MinSizeRel/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/MinSizeRel/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/MinSizeRel/flatbuffers.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "include/flatbuffers/code_generators.h",
+                      "include/flatbuffers/base.h",
+                      "include/flatbuffers/flatbuffers.h",
+                      "include/flatbuffers/hash.h",
+                      "include/flatbuffers/idl.h",
+                      "include/flatbuffers/util.h",
+                      "include/flatbuffers/reflection.h",
+                      "include/flatbuffers/reflection_generated.h",
+                      "include/flatbuffers/stl_emulation.h",
+                      "include/flatbuffers/flexbuffers.h",
+                      "include/flatbuffers/registry.h",
+                      "include/flatbuffers/minireflect.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /W4 /WX /wd4512 /wd4316 /MD /O1 /Ob1 /DNDEBUG  ",
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/include"
+                      },
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/grpc"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/code_generators.cpp",
+                      "src/idl_parser.cpp",
+                      "src/idl_gen_text.cpp",
+                      "src/reflection.cpp",
+                      "src/util.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "flatbuffers.lib",
+                "linkFlags": "/machine:x64",
+                "linkerLanguage": "CXX",
+                "name": "flatbuffers",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "STATIC_LIBRARY"
+              }
+            ]
+          },
+          {
+            "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+            "name": "libwebstreamer",
+            "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+            "targets": [
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/lib/MinSizeRel/libwebstreamer.dll",
+                  "D:/Working/MyProject/libwebstreamer/build/lib/MinSizeRel/libwebstreamer.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/lib/MinSizeRel/libwebstreamer.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/lib",
+                "fileGroups": [
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MP /wd4819 /MD /O1 /Ob1 /DNDEBUG  ",
+                    "defines": [
+                      "_CRT_NONSTDC_NO_DEPRECATE",
+                      "_CRT_SECURE_NO_DEPRECATE",
+                      "_SCL_SECURE_NO_WARNINGS",
+                      "libwebstreamer_EXPORTS"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/lib/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/gstreamer-1.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/glib-2.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/lib/glib-2.0/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "source/application/endpoint/rtspclient.cc",
+                      "source/application/endpoint/rtspserver.cc",
+                      "source/application/endpoint/testsink.cc",
+                      "source/application/endpoint/webrtc.cc",
+                      "source/application/endpoint/webrtc_manager.cc",
+                      "source/application/pipeline/livestream.cc",
+                      "source/dispatcher.cc",
+                      "source/framework/endpoint.cc",
+                      "source/framework/pipeline.cc",
+                      "source/framework/pipeline_manager.cc",
+                      "source/main.cc",
+                      "source/utils/pipejoint.cc",
+                      "source/utils/type_def.cc"
+                    ]
+                  },
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "source/utils/gstutility/gst_inter_sink.h",
+                      "source/utils/gstutility/gst_inter_src.h",
+                      "source/utils/gstutility/gst_rtsp_server.h",
+                      "include/fbs/common_generated.h",
+                      "include/fbs/livestreamer_generated.h",
+                      "include/fbs/webstreamer_generated.h",
+                      "include/node_plugin_interface.h",
+                      "include/application/endpoint/rtspclient.hpp",
+                      "include/application/endpoint/rtspserver.hpp",
+                      "include/application/endpoint/testsink.hpp",
+                      "include/application/endpoint/webrtc.hpp",
+                      "include/application/endpoint/webrtc_manager.hpp",
+                      "include/application/pipeline/livestream.hpp",
+                      "include/dispatcher.hpp",
+                      "include/framework/endpoint.hpp",
+                      "include/framework/pipeline.hpp",
+                      "include/framework/pipeline_manager.hpp",
+                      "include/utils/pipejoint.hpp",
+                      "include/utils/status_code.hpp",
+                      "include/utils/type_def.hpp",
+                      "CMakelists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /MD /O1 /Ob1 /DNDEBUG  ",
+                    "defines": [
+                      "_CRT_NONSTDC_NO_DEPRECATE",
+                      "_CRT_SECURE_NO_DEPRECATE",
+                      "_SCL_SECURE_NO_WARNINGS",
+                      "libwebstreamer_EXPORTS"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/lib/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/gstreamer-1.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/glib-2.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/lib/glib-2.0/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "C",
+                    "sources": [
+                      "source/utils/gstutility/gst_inter_sink.c",
+                      "source/utils/gstutility/gst_inter_src.c",
+                      "source/utils/gstutility/gst_rtsp_server.c"
+                    ]
+                  }
+                ],
+                "fullName": "libwebstreamer.dll",
+                "linkFlags": "/machine:x64 /INCREMENTAL:NO",
+                "linkLibraries": "gstrtspserver-1.0.lib gstbase-1.0.lib gstreamer-1.0.lib gobject-2.0.lib glib-2.0.lib intl.lib ..\\flatbuffers\\MinSizeRel\\flatbuffers.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+                "linkPath": "-LIBPATH:C:\\cerbero\\x86_64\\lib",
+                "linkerLanguage": "CXX",
+                "name": "libwebstreamer",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/lib",
+                "type": "SHARED_LIBRARY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/MinSizeRel/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/MinSizeRel/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/MinSizeRel/flatbuffers.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "include/flatbuffers/code_generators.h",
+                      "include/flatbuffers/base.h",
+                      "include/flatbuffers/flatbuffers.h",
+                      "include/flatbuffers/hash.h",
+                      "include/flatbuffers/idl.h",
+                      "include/flatbuffers/util.h",
+                      "include/flatbuffers/reflection.h",
+                      "include/flatbuffers/reflection_generated.h",
+                      "include/flatbuffers/stl_emulation.h",
+                      "include/flatbuffers/flexbuffers.h",
+                      "include/flatbuffers/registry.h",
+                      "include/flatbuffers/minireflect.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /W4 /WX /wd4512 /wd4316 /MD /O1 /Ob1 /DNDEBUG  ",
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/include"
+                      },
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/grpc"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/code_generators.cpp",
+                      "src/idl_parser.cpp",
+                      "src/idl_gen_text.cpp",
+                      "src/reflection.cpp",
+                      "src/util.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "flatbuffers.lib",
+                "linkFlags": "/machine:x64",
+                "linkerLanguage": "CXX",
+                "name": "flatbuffers",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "STATIC_LIBRARY"
+              },
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakelists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+                "type": "UTILITY"
+              },
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": true,
+                    "sources": [
+                      "build/CMakeFiles/4df2b05a53502b397c8748c25159ec50/generate.stamp.rule"
+                    ]
+                  }
+                ],
+                "fullName": "ZERO_CHECK",
+                "name": "ZERO_CHECK",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+                "type": "UTILITY"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "RelWithDebInfo",
+        "projects": [
+          {
+            "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+            "name": "FlatBuffers",
+            "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+            "targets": [
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/RelWithDebInfo/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/RelWithDebInfo/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/RelWithDebInfo/flatbuffers.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "include/flatbuffers/code_generators.h",
+                      "include/flatbuffers/base.h",
+                      "include/flatbuffers/flatbuffers.h",
+                      "include/flatbuffers/hash.h",
+                      "include/flatbuffers/idl.h",
+                      "include/flatbuffers/util.h",
+                      "include/flatbuffers/reflection.h",
+                      "include/flatbuffers/reflection_generated.h",
+                      "include/flatbuffers/stl_emulation.h",
+                      "include/flatbuffers/flexbuffers.h",
+                      "include/flatbuffers/registry.h",
+                      "include/flatbuffers/minireflect.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /W4 /WX /wd4512 /wd4316 /MD /Zi /O2 /Ob1 /DNDEBUG  ",
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/include"
+                      },
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/grpc"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/code_generators.cpp",
+                      "src/idl_parser.cpp",
+                      "src/idl_gen_text.cpp",
+                      "src/reflection.cpp",
+                      "src/util.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "flatbuffers.lib",
+                "linkFlags": "/machine:x64",
+                "linkerLanguage": "CXX",
+                "name": "flatbuffers",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "STATIC_LIBRARY"
+              }
+            ]
+          },
+          {
+            "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+            "name": "libwebstreamer",
+            "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+            "targets": [
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/lib/RelWithDebInfo/libwebstreamer.dll",
+                  "D:/Working/MyProject/libwebstreamer/build/lib/RelWithDebInfo/libwebstreamer.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/lib/RelWithDebInfo/libwebstreamer.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/lib",
+                "fileGroups": [
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MP /wd4819 /MD /Zi /O2 /Ob1 /DNDEBUG  ",
+                    "defines": [
+                      "_CRT_NONSTDC_NO_DEPRECATE",
+                      "_CRT_SECURE_NO_DEPRECATE",
+                      "_SCL_SECURE_NO_WARNINGS",
+                      "libwebstreamer_EXPORTS"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/lib/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/gstreamer-1.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/glib-2.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/lib/glib-2.0/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "source/application/endpoint/rtspclient.cc",
+                      "source/application/endpoint/rtspserver.cc",
+                      "source/application/endpoint/testsink.cc",
+                      "source/application/endpoint/webrtc.cc",
+                      "source/application/endpoint/webrtc_manager.cc",
+                      "source/application/pipeline/livestream.cc",
+                      "source/dispatcher.cc",
+                      "source/framework/endpoint.cc",
+                      "source/framework/pipeline.cc",
+                      "source/framework/pipeline_manager.cc",
+                      "source/main.cc",
+                      "source/utils/pipejoint.cc",
+                      "source/utils/type_def.cc"
+                    ]
+                  },
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "source/utils/gstutility/gst_inter_sink.h",
+                      "source/utils/gstutility/gst_inter_src.h",
+                      "source/utils/gstutility/gst_rtsp_server.h",
+                      "include/fbs/common_generated.h",
+                      "include/fbs/livestreamer_generated.h",
+                      "include/fbs/webstreamer_generated.h",
+                      "include/node_plugin_interface.h",
+                      "include/application/endpoint/rtspclient.hpp",
+                      "include/application/endpoint/rtspserver.hpp",
+                      "include/application/endpoint/testsink.hpp",
+                      "include/application/endpoint/webrtc.hpp",
+                      "include/application/endpoint/webrtc_manager.hpp",
+                      "include/application/pipeline/livestream.hpp",
+                      "include/dispatcher.hpp",
+                      "include/framework/endpoint.hpp",
+                      "include/framework/pipeline.hpp",
+                      "include/framework/pipeline_manager.hpp",
+                      "include/utils/pipejoint.hpp",
+                      "include/utils/status_code.hpp",
+                      "include/utils/type_def.hpp",
+                      "CMakelists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /MD /Zi /O2 /Ob1 /DNDEBUG  ",
+                    "defines": [
+                      "_CRT_NONSTDC_NO_DEPRECATE",
+                      "_CRT_SECURE_NO_DEPRECATE",
+                      "_SCL_SECURE_NO_WARNINGS",
+                      "libwebstreamer_EXPORTS"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/lib/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/gstreamer-1.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include/glib-2.0"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/lib/glib-2.0/include"
+                      },
+                      {
+                        "path": "C:/cerbero/x86_64/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "C",
+                    "sources": [
+                      "source/utils/gstutility/gst_inter_sink.c",
+                      "source/utils/gstutility/gst_inter_src.c",
+                      "source/utils/gstutility/gst_rtsp_server.c"
+                    ]
+                  }
+                ],
+                "fullName": "libwebstreamer.dll",
+                "linkFlags": "/machine:x64 /debug /INCREMENTAL",
+                "linkLibraries": "gstrtspserver-1.0.lib gstbase-1.0.lib gstreamer-1.0.lib gobject-2.0.lib glib-2.0.lib intl.lib ..\\flatbuffers\\RelWithDebInfo\\flatbuffers.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+                "linkPath": "-LIBPATH:C:\\cerbero\\x86_64\\lib",
+                "linkerLanguage": "CXX",
+                "name": "libwebstreamer",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/lib",
+                "type": "SHARED_LIBRARY"
+              },
+              {
+                "artifacts": [
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/RelWithDebInfo/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/RelWithDebInfo/flatbuffers.lib",
+                  "D:/Working/MyProject/libwebstreamer/build/flatbuffers/RelWithDebInfo/flatbuffers.pdb"
+                ],
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build/flatbuffers",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "include/flatbuffers/code_generators.h",
+                      "include/flatbuffers/base.h",
+                      "include/flatbuffers/flatbuffers.h",
+                      "include/flatbuffers/hash.h",
+                      "include/flatbuffers/idl.h",
+                      "include/flatbuffers/util.h",
+                      "include/flatbuffers/reflection.h",
+                      "include/flatbuffers/reflection_generated.h",
+                      "include/flatbuffers/stl_emulation.h",
+                      "include/flatbuffers/flexbuffers.h",
+                      "include/flatbuffers/registry.h",
+                      "include/flatbuffers/minireflect.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /W4 /WX /wd4512 /wd4316 /MD /Zi /O2 /Ob1 /DNDEBUG  ",
+                    "includePath": [
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/include"
+                      },
+                      {
+                        "path": "D:/Working/MyProject/libwebstreamer/flatbuffers/grpc"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "src/code_generators.cpp",
+                      "src/idl_parser.cpp",
+                      "src/idl_gen_text.cpp",
+                      "src/reflection.cpp",
+                      "src/util.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "flatbuffers.lib",
+                "linkFlags": "/machine:x64",
+                "linkerLanguage": "CXX",
+                "name": "flatbuffers",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer/flatbuffers",
+                "type": "STATIC_LIBRARY"
+              },
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakelists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+                "type": "UTILITY"
+              },
+              {
+                "buildDirectory": "D:/Working/MyProject/libwebstreamer/build",
+                "fileGroups": [
+                  {
+                    "isGenerated": true,
+                    "sources": [
+                      "build/CMakeFiles/4df2b05a53502b397c8748c25159ec50/generate.stamp.rule"
+                    ]
+                  }
+                ],
+                "fullName": "ZERO_CHECK",
+                "name": "ZERO_CHECK",
+                "sourceDirectory": "D:/Working/MyProject/libwebstreamer",
+                "type": "UTILITY"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cookie": "0.5544448076178361",
+    "inReplyTo": "codemodel",
+    "type": "reply"
+  }
+}

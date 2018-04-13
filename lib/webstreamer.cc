@@ -141,12 +141,13 @@ void WebStreamer::OnPromise(Promise *promise)
 	const json& j = promise->meta();
 
 	std::string action = j["action"];
-	if (action == "create") {
+    printf("action:%s %s@%s\n", action.c_str(), j["name"].dump().c_str(), j["type"].dump().c_str());
+    if (action == "create") {
 		CreateProcessor(promise);
 	}
-//	else if (action == "destry") {
-//		DestroyProcessor(promise);
-//	}
+	else if (action == "destroy") {
+		DestroyProcessor(promise);
+	}
 	else {
 		const std::string& name = j["name"];
 		const std::string& type = j["type"];
@@ -156,9 +157,8 @@ void WebStreamer::OnPromise(Promise *promise)
 			return;
 		}
 		app->On(promise);
-		return;
 	}
-
+	delete promise;
 }
 
 
@@ -194,11 +194,25 @@ void WebStreamer::CreateProcessor(Promise* promise)
 		promise->reject("app initialize failed.");
 		return;
 	}
+	promise->resolve();
 }
 void WebStreamer::DestroyProcessor(Promise* promise) {
-	promise->resolve();
-	delete promise;
+    const json &j = promise->meta();
+    std::string name = j["name"];
+    std::string type = j["type"];
+    std::string uname = name + "@" + type;
 
+    IApp *app = apps_[uname];
+
+    if (!app)
+    {
+        promise->reject(uname + " wasn't an exist processor.");
+        return;
+    }
+    app->Destroy(promise);
+    apps_.erase(uname);
+    delete app;
+    promise->resolve();
 }
 
 static gboolean pool_cleanup(GstRTSPSessionPool* *pool)

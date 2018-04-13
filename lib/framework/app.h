@@ -29,27 +29,40 @@ public:
 	
 	virtual void Notify(const nlohmann::json& data, const nlohmann::json& meta);
 	WebStreamer& webstreamer() { return *webstreamer_; }
-protected:
+    GstElement *pipeline()
+    {
+        return pipeline_;
+    }
+    std::string name()
+    {
+        return name_;
+    }
+
+private:
 
 	std::string name_;
 	GstElement* pipeline_;
 	WebStreamer* webstreamer_;
 
+    std::string video_encoding_;
+    std::string audio_encoding_;
+
 };
 
-#define APP( klass )                             \
-	static const char* CLASS_NAME() {            \
-        return #klass;                           \
-	};                                           \
-                                                 \
-	const char* type() const                     \
-	{                                            \
-		return CLASS_NAME();                     \
-	}                                            \
-                                                 \
-	std::string uname()                          \
-	{                                            \
-		return this->name_ + "@" + this->type(); \
-	}                                            
+#define APP(klass)                                \
+    static const char *CLASS_NAME()               \
+    {                                             \
+        return #klass;                            \
+    };                                            \
+                                                  \
+    const char *type() const                      \
+    {                                             \
+        return CLASS_NAME();                      \
+    }                                             \
+                                                  \
+    std::string uname()                           \
+    {                                             \
+        return this->name() + "@" + this->type(); \
+    }
 
 #endif//_LIBWEBSTREAMER_PROCESSOR_H_

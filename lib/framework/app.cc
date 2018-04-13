@@ -9,11 +9,9 @@ bool IApp::Initialize(Promise* promise)
 	}
 
 	if (pipeline_) {
-		promise->resolve();
 		return true;
 	}
 	else {
-		promise->reject("create pipeline failed.");
 		return false;
 	}
 }
@@ -21,7 +19,13 @@ bool IApp::Initialize(Promise* promise)
 
 void IApp::Destroy(Promise* promise)
 {
-
+    if (pipeline_)
+    {
+        gst_element_set_state(pipeline_, GST_STATE_NULL);
+        gst_object_unref(pipeline_);
+        pipeline_ = NULL;
+    }
+    webstreamer_ = NULL;
 }
 
 

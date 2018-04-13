@@ -23,7 +23,7 @@ message_handler(GstBus * bus, GstMessage * message, gpointer data)
 bool ElementWatcher::Initialize(Promise* promise)
 {
 	
-	promise->resolve();
+	// promise->resolve();
 	return true;
 }
 
@@ -99,13 +99,11 @@ void ElementWatcher::Startup(Promise* promise)
 
 void ElementWatcher::Stop(Promise* promise)
 {
-//	const json& j = promise->param();
-//	std::string action = j["action"];
-//
-	gst_element_set_state(pipeline_, GST_STATE_NULL);
-	promise->resolve();
 
-
+    gst_element_set_state(pipeline_, GST_STATE_NULL);
+    gst_object_unref(pipeline_);
+    pipeline_ = NULL;
+    promise->resolve();
 }
 
 

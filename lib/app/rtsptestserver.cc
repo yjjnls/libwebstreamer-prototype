@@ -36,7 +36,6 @@ public:
 bool RTSPTestServer::Initialize(Promise* promise)
 {
 	rtspservice_ = new RTSPTestService(this, "test");
-	promise->resolve();
 	return true;
 }
 
@@ -51,7 +50,11 @@ void RTSPTestServer::On(Promise* promise)
 	else if (action == "stop")
 	{
 		Stop(promise);
-	}
+    }
+    else
+    {
+        promise->reject("Action: " + action + " is not supported!");
+    }
 }
 
 void RTSPTestServer::Startup(Promise* promise)
@@ -82,5 +85,8 @@ void RTSPTestServer::Stop(Promise* promise)
 
 void RTSPTestServer::Destroy(Promise* promise)
 {
-
+    if (!rtspservice_)
+    {
+        delete rtspservice_;
+    }
 }

@@ -16,6 +16,15 @@ public:
 
 	IApp* app() { return app_; }
 	const std::string& name() { return name_; }
+
+    virtual bool initialize(Promise *promise)
+    {
+        return true;
+    }
+    virtual void terminate()
+    {
+    }
+
 protected:
 	IApp* app_;
 	std::string name_;
